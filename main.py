@@ -1,16 +1,22 @@
 import pandas as pd
 from typing import NoReturn, Optional
+from utils import try_except
 
 def main() -> None:
-    try:
-        file_path: str = 'data/pokemon.csv'
-        df: pd.DataFrame = pd.read_csv(file_path)
-        print(f"Head of {file_path}:")
-        print(df.head())
-    except FileNotFoundError:
-        print(f"Error: File not found. Please ensure 'data.csv' exists in the directory.")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    file_path: str = 'data/pokemon.csv'
+
+    df, error = try_except(pd.read_csv, file_path)
+    
+    if error:
+        if isinstance(error, FileNotFoundError):
+            print(f"Error: File not found. Please ensure '{file_path}' exists in the directory.")
+        else:
+            print(f"An error occurred: {error}")
+        return
+    
+    print(f"Head of {file_path}:")
+    assert df is not None
+    print(df.head())
 
 
 if __name__ == "__main__":
