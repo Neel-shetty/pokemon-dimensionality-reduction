@@ -7,15 +7,10 @@ def main() -> None:
 
     df, error = try_except(pd.read_csv, file_path)
     
-    if error:
-        if isinstance(error, FileNotFoundError):
-            print(f"Error: File not found. Please ensure '{file_path}' exists in the directory.")
-        else:
-            print(f"An error occurred: {error}")
-        return
+    if error or df is None:
+        return print(f"An error occurred: {error}")
     
     print(f"Head of {file_path}:")
-    assert df is not None
     print(df.head())
 
 
