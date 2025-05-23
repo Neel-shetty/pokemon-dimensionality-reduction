@@ -1,22 +1,11 @@
-from typing import TypeVar, Callable 
+from typing import TypeVar, Callable, Tuple
 
 # Type variables for generic function
 T = TypeVar('T')
 
-def try_except(func: Callable[[], T]) -> T | Exception:
-    """
-    A utility function that attempts to execute a given function and returns its result.
-    If an exception occurs, it returns the exception instead.
-    This is useful for handling errors in a clean and concise manner.
-
-    use isinstance() to check if the result is an exception.
-    Args:
-        func (Callable[[], T]): The function to execute.
-    Returns:
-        T | Exception: The result of the function or the exception raised.
-    """
+def try_except(func: Callable[[], T]) -> Tuple[T, None] | Tuple[None, Exception]:
     try:
         result = func()
-        return result
+        return result, None
     except Exception as e:
-        return e
+        return None, e
