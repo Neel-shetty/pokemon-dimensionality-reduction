@@ -1,33 +1,20 @@
-from typing import TypeVar, Callable, Tuple, Optional, Any, cast, ParamSpec, overload, Union, TypeGuard
+from typing import TypeVar, Callable 
 
 # Type variables for generic function
 T = TypeVar('T')
-P = ParamSpec('P')
-E = TypeVar('E', bound=Exception)
 
-def try_except(func: Callable[[], T]) -> Union[
-    Tuple[T, None],           # Success case: result is T, error is None
-    Tuple[None, Exception]    # Error case: result is None, error is Exception
-]:
+def try_except(func: Callable[[], T]) -> T | Exception:
     """
-    Execute a function and catch any exceptions, returning a tuple of (result, error).
-    If successful, error will be None and result is guaranteed to be T.
-    If an exception occurs, result will be None and error will be the Exception.
-    
+    A utility function that attempts to execute a given function and returns its result.
+    If an exception occurs, it returns the exception instead.
+    This is useful for handling errors in a clean and concise manner.
     Args:
-        func: A callable that takes no arguments and returns T
-        
+        func (Callable[[], T]): The function to execute.
     Returns:
-        Union[Tuple[T, None], Tuple[None, Exception]]: Either (result, None) or (None, error)
+        T | Exception: The result of the function or the exception raised.
     """
     try:
         result = func()
-        return result, None
+        return result
     except Exception as e:
-        return None, e
-
-def is_success(result: Tuple[Optional[T], Optional[Exception]]) -> TypeGuard[Tuple[T, None]]:
-    return result[0] is not None and result[1] is None
-
-def is_error(result: Tuple[Optional[Any], Optional[Exception]]) -> TypeGuard[Tuple[None, Exception]]:
-    return result[0] is None and result[1] is not None
+        return e
