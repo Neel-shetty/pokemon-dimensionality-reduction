@@ -8,6 +8,8 @@ def try_except(func: Callable[[], T]) -> T | Exception:
     A utility function that attempts to execute a given function and returns its result.
     If an exception occurs, it returns the exception instead.
     This is useful for handling errors in a clean and concise manner.
+
+    use isinstance() to check if the result is an exception.
     Args:
         func (Callable[[], T]): The function to execute.
     Returns:
