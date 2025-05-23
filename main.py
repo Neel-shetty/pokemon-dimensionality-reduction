@@ -1,17 +1,33 @@
 import pandas as pd
-from typing import NoReturn, Optional
-from utils import try_except
+from utils import is_success, is_error, try_except
+
+# def try_except(t: func, ex: Exception = None):
+#   try:
+#     result = t()
+#     return result
+#   except Exception as e:
+#     if isinstance(e,ex):
+#       return e
+#     elif ex is None:
+#       return None
+#     # else:
+#     #   return False
+
 
 def main() -> None:
     file_path: str = 'data/pokemon.csv'
 
-    df, error = try_except(pd.read_csv, file_path)
+    res = try_except(lambda: pd.read_csv(file_path))
     
-    if error or df is None:
-        return print(f"An error occurred: {error}")
+    if is_error(res):
+        return
+    # if is_success(res):
+    data = res[0]
+    if data is None:
+        return
+    data.head()
     
-    print(f"Head of {file_path}:")
-    print(df.head())
+
 
 
 if __name__ == "__main__":
